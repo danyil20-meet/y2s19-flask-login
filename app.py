@@ -26,20 +26,26 @@ def signup():
     #check that username isn't already taken
     user = get_user(request.form['username'])
     if user == None:
-        add_user(request.form['username'],request.form['password'])
+        add_user(request.form['username'],request.form['password'], None)
     return home()
 
 
-@app.route('/logged-in')
+@app.route('/logged-in', methods=['GET', 'POST'])
 def logged_in():
-    return render_template('logged.html')
+    try:
+        if request.method == 'POST':
+            add_food(request.form['username'], request.form['fav_food'])
+
+        return render_template('logged.html')
+    except:
+        return render_template('logged.html')
 
 
 @app.route('/logout')
 def logout():
+    login_session['name'] = None
+    login_session['logged_in'] = False
     return home()
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)

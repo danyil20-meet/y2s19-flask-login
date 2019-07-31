@@ -9,10 +9,19 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
-    #what else does a user account need?
     password_hash = Column(String)
+    username = Column(String)
+    fav_food = Column(String)
 
     def hash_password(self, password):
         self.password_hash = pwd_security.encrypt(password)
     def verify_password(self, password):
         return pwd_security.verify(password, self.password_hash)
+
+    def __repr__(self):
+		return (  "Your username: {}\n"
+				"Your password hash: {} \n"
+                "Your favourite food: ").format(
+					self.name,
+					self.password_hash,
+                    self.fav_food)
